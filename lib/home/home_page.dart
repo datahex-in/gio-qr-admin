@@ -1,11 +1,14 @@
+// ignore_for_file: avoid_web_libraries_in_flutter, library_private_types_in_public_api, deprecated_member_use, use_build_context_synchronously, avoid_print
+
 import 'dart:html' as html;
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class ImageSaverWeb extends StatefulWidget {
+  const ImageSaverWeb({super.key});
+
   @override
   _ImageSaverWebState createState() => _ImageSaverWebState();
 }
@@ -22,7 +25,8 @@ class _ImageSaverWebState extends State<ImageSaverWeb> {
 
   Future<Uint8List> _captureImage(QrPainter painter) async {
     final recorder = ui.PictureRecorder();
-    final canvas = Canvas(recorder, Rect.fromPoints(Offset(0.0, 0.0), Offset(200.0, 200.0)));
+    final canvas = Canvas(recorder,
+        Rect.fromPoints(const Offset(0.0, 0.0), const Offset(200.0, 200.0)));
     painter.paint(canvas, const Size(200.0, 200.0));
 
     final picture = recorder.endRecording();
@@ -39,8 +43,8 @@ class _ImageSaverWebState extends State<ImageSaverWeb> {
         data: qrData,
         version: QrVersions.auto,
         gapless: true,
-        color: Color.fromARGB(255, 255, 255, 255),
-        emptyColor: Color.fromARGB(255, 0, 0, 0),
+        color: const Color.fromARGB(255, 255, 255, 255),
+        emptyColor: const Color.fromARGB(255, 0, 0, 0),
       );
 
       final buffer = await _captureImage(img);
@@ -64,12 +68,12 @@ class _ImageSaverWebState extends State<ImageSaverWeb> {
       html.Url.revokeObjectUrl(url);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('QR code saved to gallery')),
+        const SnackBar(content: Text('QR code saved to gallery')),
       );
     } catch (e) {
       print("Error saving image: $e");
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save QR code')),
+        const SnackBar(content: Text('Failed to save QR code')),
       );
     }
   }
@@ -84,27 +88,27 @@ class _ImageSaverWebState extends State<ImageSaverWeb> {
           children: [
             TextField(
               controller: textEditingController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Enter text for QR code',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _generateQRCode,
-              child: Text('Generate QR Code'),
+              child: const Text('Generate QR Code'),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             if (qrData.isNotEmpty)
               Image.memory(
                 Uint8List.fromList([]), // Placeholder for the image
                 width: 200,
                 height: 200,
               ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _downloadQRCode,
-              child: Text('Download QR Code'),
+              child: const Text('Download QR Code'),
             ),
           ],
         ),
@@ -114,7 +118,7 @@ class _ImageSaverWebState extends State<ImageSaverWeb> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: ImageSaverWeb(),
   ));
 }

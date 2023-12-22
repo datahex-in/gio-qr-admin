@@ -1,4 +1,5 @@
-import 'dart:typed_data';
+
+// ignore_for_file: deprecated_member_use, avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -45,8 +46,8 @@ void _downloadQRCode() async {
       data: qrData,
       version: QrVersions.auto,
       gapless: true,
-      color: Color.fromARGB(255, 255, 255, 255),
-      emptyColor: Color.fromARGB(255, 0, 0, 0),
+      color: const Color.fromARGB(255, 255, 255, 255),
+      emptyColor: const Color.fromARGB(255, 0, 0, 0),
     );
 
     final imgData = await qrPainter.toImageData(500);
@@ -56,12 +57,12 @@ void _downloadQRCode() async {
     final result = await ImageGallerySaver.saveImage(buffer);
     print("Image saved: $result");
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('QR code saved to gallery')),
+      const SnackBar(content: Text('QR code saved to gallery')),
     );
   } catch (e) {
     print("Error saving image: $e");
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to save QR code')),
+      const SnackBar(content: Text('Failed to save QR code')),
     );
   }
 }
@@ -192,7 +193,7 @@ void _downloadQRCode() async {
   onPressed: ()   {
     _downloadQRCode();
   },
-  child: Text("Download QR Code"),
+  child: const Text("Download QR Code"),
 ),
                   
               ],
