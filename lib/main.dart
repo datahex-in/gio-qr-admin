@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gio_app/home/dashboard.dart';
+import 'package:gio_app/home/qr_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -24,18 +26,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'GIO KERALA',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+ChangeNotifierProvider(create: (_) => QrProvider()),     
+   ],
+      child: MaterialApp(
+        title: 'GIO KERALA',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: '/home',
+        routes: {
+          '/home': (context) =>
+              const GioHome(), // Define the route for your home screen
+        },
       ),
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) =>
-            const GioHome(), // Define the route for your home screen
-      },
     );
   }
 }
