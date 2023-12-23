@@ -62,52 +62,11 @@ class _AdminDashboardState extends State<GioHome> {
   // Fetch details for the entered phone number
   QrProvider qrProvider = Provider.of<QrProvider>(context, listen: false);
   qrProvider.mobile = formatPhoneNumber(phoneNumber);
-  await qrProvider.getDetails();
+  await qrProvider.getDetails(context: context);
 
-  if (qrProvider.detailsData != null&&qrProvider.detailsData!.success == false) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          
-          title: const Center(child: Text('Registration Required',
-          textAlign: TextAlign.center,)),
-          content: SizedBox(
-            height: 120, // Adjust the height as needed
-            child: Column(
-              children: [
-                const Text(
-                  'Your registration to Discurso Muslimah is not yet received. Register Now',
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to the provided link
-                    // You may need to use a package like 'url_launcher' for this
-                    // Example using 'url_launcher':
-                   _launchUrl();
-                  },
-                  child: const Text(
-                    'https://discurso.giokerala.org/register/',
-                    style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  } else {
+  if (qrProvider.detailsData!.success == true) {
+   
+  
     setState(() {
       qrData = formatPhoneNumber(phoneNumber);
       isLoading = false;
@@ -260,29 +219,36 @@ builder: (context,snapshot,child)=>
     // : snapshot.detailsData!.response.first.name.toString()),
 
                   if (qrData.isNotEmpty)
-                    Container(
-                      width: size.width / 1.5,
-                      height: size.height / 3.2,
-                      padding: const EdgeInsets.all(18.0),
-                      decoration: BoxDecoration(
-                        color: ColorClass.white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
-                            blurRadius: 33,
-                            spreadRadius: -4,
-                            offset: const Offset(0, -1),
+                    Column(
+                      children: [
+                        Text("Show this QR code at the registration counter"),
+                        SizedBox(height: 10,),
+                        
+                        Container(
+                          width: size.width / 1.5,
+                          height: size.height / 3.2,
+                          padding: const EdgeInsets.all(18.0),
+                          decoration: BoxDecoration(
+                            color: ColorClass.white,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.15),
+                                blurRadius: 33,
+                                spreadRadius: -4,
+                                offset: const Offset(0, -1),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Center(
-                        child: QrImageView(
-                          data: qrData,
-                          version: QrVersions.auto,
-                          size: 200.0,
+                          child: Center(
+                            child: QrImageView(
+                              data: qrData,
+                              version: QrVersions.auto,
+                              size: 200.0,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   const SizedBox(
                     height: 10,
