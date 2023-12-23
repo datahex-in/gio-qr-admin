@@ -2,6 +2,7 @@ import 'dart:developer';
 
 
 import 'package:flutter/material.dart';
+import 'package:gio_app/constants/textstyle_class.dart';
 import 'package:gio_app/home/Utils/api_support.dart';
 import 'package:gio_app/home/dashboard.dart';
 import 'package:gio_app/home/details_model.dart';
@@ -46,9 +47,10 @@ class QrProvider extends ChangeNotifier {
             height: 120, // Adjust the height as needed
             child: Column(
               children: [
-                const Text(
+                  Text(
                   'Your registration to Discurso Muslimah is not yet received. Register Now',
                   textAlign: TextAlign.center,
+                  style: TextStyleClass.black12_400qua,
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(

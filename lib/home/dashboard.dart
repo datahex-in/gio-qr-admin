@@ -141,6 +141,9 @@ builder: (context,snapshot,child)=>
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Text("Download Your E-Pass",
+                  style: TextStyleClass.black16_400qua,),
+                  const SizedBox(height: 20,),
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: size.width * 0.08,
@@ -221,9 +224,10 @@ builder: (context,snapshot,child)=>
                   if (qrData.isNotEmpty)
                     Column(
                       children: [
-                        Text("Show this QR code at the registration counter"),
-                        SizedBox(height: 10,),
-                        
+                          Text("Show this QR code at the registration counter",
+                        style: TextStyleClass.black14_400sec,),
+                        const SizedBox(height: 10,),
+
                         Container(
                           width: size.width / 1.5,
                           height: size.height / 3.2,
@@ -259,7 +263,8 @@ builder: (context,snapshot,child)=>
                       onPressed: () {
                         _downloadQRCode();
                       },
-                      child: const Text("Download QR Code"),
+                      child:   Text("Download QR Code",
+                      style: TextStyleClass.black16_400qua,),
                     ),
                   ),
                 ],
