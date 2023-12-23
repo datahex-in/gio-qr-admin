@@ -1,7 +1,5 @@
 // ignore_for_file: deprecated_member_use, avoid_print, use_build_context_synchronously
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gio_app/home/qr_provider.dart';
@@ -28,101 +26,101 @@ class _AdminDashboardState extends State<GioHome> {
   bool isLoading = false;
   final Uri _url = Uri.parse('https://discurso.giokerala.org/register/');
   Future<void> _launchUrl() async {
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
-}
-
-   
 
   Future<void> _generateQRCode() async {
-  String phoneNumber = phoneController.text.trim();
-  String formatPhoneNumber(String phoneNumber) {
-    // Remove any non-digit characters from the phone number
-    String cleanedNumber = phoneNumber.replaceAll(RegExp(r'\D'), '');
+    String phoneNumber = phoneController.text.trim();
+    String formatPhoneNumber(String phoneNumber) {
+      // Remove any non-digit characters from the phone number
+      String cleanedNumber = phoneNumber.replaceAll(RegExp(r'\D'), '');
 
-    // Check if the cleaned number starts with "91"
-    if (cleanedNumber.startsWith("91")) {
-      // Remove "91" from the beginning
-      cleanedNumber = cleanedNumber.substring(2);
+      // Check if the cleaned number starts with "91"
+      if (cleanedNumber.startsWith("91")) {
+        // Remove "91" from the beginning
+        cleanedNumber = cleanedNumber.substring(2);
+      }
+
+      // Add the country code and format the number
+      return "+91 ${cleanedNumber.substring(0, 5)} ${cleanedNumber.substring(5)}";
     }
 
-    // Add the country code and format the number
-    return "+91 ${cleanedNumber.substring(0, 5)} ${cleanedNumber.substring(5)}";
-  }
+    // Basic validation: Check if the phone number is not empty and has 10 digits
+    if (phoneNumber.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please enter a valid 10-digit phone number')),
+      );
+      return;
+    }
 
-  // Basic validation: Check if the phone number is not empty and has 10 digits
-  if (phoneNumber.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please enter a valid 10-digit phone number')),
-    );
-    return;
-  }
+    // Fetch details for the entered phone number
+    QrProvider qrProvider = Provider.of<QrProvider>(context, listen: false);
+    qrProvider.mobile = formatPhoneNumber(phoneNumber);
+    await qrProvider.getDetails();
 
-  // Fetch details for the entered phone number
-  QrProvider qrProvider = Provider.of<QrProvider>(context, listen: false);
-  qrProvider.mobile = formatPhoneNumber(phoneNumber);
-  await qrProvider.getDetails();
-
-  if (qrProvider.detailsData != null&&qrProvider.detailsData!.success == false) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          
-          title: const Center(child: Text('Registration Required',
-          textAlign: TextAlign.center,)),
-          content: SizedBox(
-            height: 120, // Adjust the height as needed
-            child: Column(
-              children: [
-                const Text(
-                  'Your registration to Discurso Muslimah is not yet received. Register Now',
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to the provided link
-                    // You may need to use a package like 'url_launcher' for this
-                    // Example using 'url_launcher':
-                   _launchUrl();
-                  },
-                  child: const Text(
-                    'https://discurso.giokerala.org/register/',
-                    style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+    if (qrProvider.detailsData != null &&
+        qrProvider.detailsData!.success == false) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Center(
+                child: Text(
+              'Registration Required',
+              textAlign: TextAlign.center,
+            )),
+            content: SizedBox(
+              height: 120, // Adjust the height as needed
+              child: Column(
+                children: [
+                  const Text(
+                    'Your registration to Discurso Muslimah is not yet received. Register Now',
+                    textAlign: TextAlign.center,
                   ),
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to the provided link
+                      // You may need to use a package like 'url_launcher' for this
+                      // Example using 'url_launcher':
+                      _launchUrl();
+                    },
+                    child: const Text(
+                      'https://discurso.giokerala.org/register/',
+                      style: TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
-  } else {
-    setState(() {
-      qrData = formatPhoneNumber(phoneNumber);
-      isLoading = false;
-    });
-    // Show a message that the user needs to register
-   
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      setState(() {
+        qrData = formatPhoneNumber(phoneNumber);
+        isLoading = false;
+      });
+      // Show a message that the user needs to register
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
-}
-
-
-
 
 // ...
 
@@ -167,8 +165,7 @@ class _AdminDashboardState extends State<GioHome> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Consumer<QrProvider>(
-builder: (context,snapshot,child)=>
-           Column(
+          builder: (context, snapshot, child) => Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -237,29 +234,32 @@ builder: (context,snapshot,child)=>
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      _generateQRCode();
-                    },
-                    child: isLoading
-                        ? const SizedBox(
-                            width: 100,
-                            child: SpinKitWave(
-                              color: Color.fromARGB(255, 42, 42, 42),
-                              size: 20,
+                  Offstage(
+                    offstage: snapshot.isMobileValid,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _generateQRCode();
+                      },
+                      child: isLoading
+                          ? const SizedBox(
+                              width: 100,
+                              child: SpinKitWave(
+                                color: Color.fromARGB(255, 42, 42, 42),
+                                size: 20,
+                              ),
+                            )
+                          : Text(
+                              "Get Your QR Code",
+                              style: TextStyleClass.black16_400qua,
                             ),
-                          )
-                        : Text(
-                            "Get Your QR Code",
-                            style: TextStyleClass.black16_400qua,
-                          ),
+                    ),
                   ),
                   const SizedBox(height: 30),
-    //              Text(snapshot.detailsData!.response.first.name == null
-    // ? " "
-    // : snapshot.detailsData!.response.first.name.toString()),
+                  //              Text(snapshot.detailsData!.response.first.name == null
+                  // ? " "
+                  // : snapshot.detailsData!.response.first.name.toString()),
 
-                  if (qrData.isNotEmpty)
+                  if (qrData.isNotEmpty && snapshot.isMobileValid)
                     Container(
                       width: size.width / 1.5,
                       height: size.height / 3.2,

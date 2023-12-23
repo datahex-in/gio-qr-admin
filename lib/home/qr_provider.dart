@@ -1,5 +1,6 @@
-import 'dart:developer';
+// ignore_for_file: avoid_print
 
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:gio_app/home/Utils/api_support.dart';
@@ -11,26 +12,30 @@ class QrProvider extends ChangeNotifier {
   DetailsModel? detailsData;
   bool detailsDataLoading = false;
   String? mobile = "";
+
+  bool isMobileValid = false;
   Future<void> getDetails() async {
     detailsDataLoading = true;
     notifyListeners();
     Uri url = Uri.parse(Apis.getDetails(mobile));
     var response = await http.get(url);
-    log(url.toString());
-    log(response.body);
+    print(url.toString());
+    print(response.body);
 
     if (response.statusCode == 200) {
       detailsData = detailsModelFromJson(response.body);
-
-      detailsDataLoading = false;
-      notifyListeners();
-    } else {
-      log('error');
-      detailsDataLoading = false;
-      notifyListeners();
+      if (detailsData != null) {
+        if (detailsData!.response.isNotEmpty) {
+          isMobileValid = true;
+          notifyListeners();
+        }
+        detailsDataLoading = false;
+        notifyListeners();
+      } else {
+        log('error');
+        detailsDataLoading = false;
+        notifyListeners();
+      }
     }
   }
-
-
-  
 }
