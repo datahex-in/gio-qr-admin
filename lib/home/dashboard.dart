@@ -89,6 +89,11 @@ class _AdminDashboardState extends State<GioHome> {
                 child: Image.asset(ImageClass.discurso),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Download your E-Pass',
+                  style: TextStyleClass.black16_400qua),
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
