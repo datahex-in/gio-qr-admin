@@ -1,9 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:gio_app/home/dashboard.dart';
-
-
-
 
 void main() {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -28,16 +24,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-         MaterialApp(
-          title: 'MLF',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
-         
-          home:const GioHome(),
-        );
+    return MaterialApp(
+      title: 'GIO KERALA',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      initialRoute: '/home',
+      routes: {
+        '/home': (context) =>
+            const GioHome(), // Define the route for your home screen
+      },
+    );
   }
 }
