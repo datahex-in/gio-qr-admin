@@ -1,15 +1,16 @@
-
 // ignore_for_file: deprecated_member_use, avoid_print, use_build_context_synchronously
+
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_downloader_web/image_downloader_web.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:gio_app/constants/color_class.dart';
 import 'package:gio_app/constants/image_class.dart';
 import 'package:gio_app/constants/textstyle_class.dart';
-
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class GioHome extends StatefulWidget {
   const GioHome({super.key});
@@ -37,38 +38,39 @@ class _AdminDashboardState extends State<GioHome> {
     });
   }
 
+  void _downloadQRCode() async {
+    try {
+      // Generate the QR code image data
+      final qrPainter = QrPainter(
+        data: qrData,
+        version: QrVersions.auto,
+        gapless: true,
+        color: const Color.fromARGB(255, 255, 255, 255),
+        emptyColor: const Color.fromARGB(255, 0, 0, 0),
+      );
 
+      final imgData = await qrPainter.toImageData(500);
+      final buffer = imgData!.buffer.asUint8List();
 
-void _downloadQRCode() async {
-  try {
-    // Generate the QR code image data
-    final qrPainter = QrPainter(
-      data: qrData,
-      version: QrVersions.auto,
-      gapless: true,
-      color: const Color.fromARGB(255, 255, 255, 255),
-      emptyColor: const Color.fromARGB(255, 0, 0, 0),
-    );
+      // Save the image to gallery
+      if (kIsWeb) {
+        print('downloading image in web');
+        await WebImageDownloader.downloadImageFromUInt8List(uInt8List: buffer);
+      } else {
+        final result = await ImageGallerySaver.saveImage(buffer);
+        print("Image saved: $result");
+      }
 
-    final imgData = await qrPainter.toImageData(500);
-    final buffer = imgData!.buffer.asUint8List();
-
-    // Save the image to gallery
-    final result = await ImageGallerySaver.saveImage(buffer);
-    print("Image saved: $result");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('QR code saved to gallery')),
-    );
-  } catch (e) {
-    print("Error saving image: $e");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Failed to save QR code')),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('QR code saved to gallery')),
+      );
+    } catch (e) {
+      print("Error saving image: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to save QR code')),
+      );
+    }
   }
-}
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +150,6 @@ void _downloadQRCode() async {
                 ElevatedButton(
                   onPressed: () {
                     _generateQRCode();
-                    
                   },
                   child: isLoading
                       ? const SizedBox(
@@ -189,13 +190,18 @@ void _downloadQRCode() async {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-  onPressed: ()   {
-    _downloadQRCode();
-  },
-  child: const Text("Download QR Code"),
-),
-                  
+                const SizedBox(
+                  height: 10,
+                ),
+                Visibility(
+                  visible: qrData.isNotEmpty,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _downloadQRCode();
+                    },
+                    child: const Text("Download QR Code"),
+                  ),
+                ),
               ],
             )
           ],
