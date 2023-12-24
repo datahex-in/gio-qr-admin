@@ -36,39 +36,39 @@ class _AdminDashboardState extends State<GioHome> {
    
 
   Future<void> _generateQRCode() async {
-  String phoneNumber = phoneController.text.trim();
-  String formatPhoneNumber(String phoneNumber) {
-    // Remove any non-digit characters from the phone number
-    String cleanedNumber = phoneNumber.replaceAll(RegExp(r'\D'), '');
+  String phoneNumber = phoneController.text;
+  // String formatPhoneNumber(String phoneNumber) {
+  //   // Remove any non-digit characters from the phone number
+  //   String cleanedNumber = phoneNumber.replaceAll(RegExp(r'\D'), '');
 
-    // Check if the cleaned number starts with "91"
-    if (cleanedNumber.startsWith("91")) {
-      // Remove "91" from the beginning
-      cleanedNumber = cleanedNumber.substring(2);
-    }
+  //   // Check if the cleaned number starts with "91"
+  //   if (cleanedNumber.startsWith("91")) {
+  //     // Remove "91" from the beginning
+  //     cleanedNumber = cleanedNumber.substring(2);
+  //   }
 
-    // Add the country code and format the number
-    return "+91 ${cleanedNumber.substring(0, 5)} ${cleanedNumber.substring(5)}";
-  }
+  //   // Add the country code and format the number
+  //   return "+91 ${cleanedNumber.substring(0, 5)} ${cleanedNumber.substring(5)}";
+  // }
 
-  // Basic validation: Check if the phone number is not empty and has 10 digits
-  if (phoneNumber.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please enter a valid 10-digit phone number')),
-    );
-    return;
-  }
+  // // Basic validation: Check if the phone number is not empty and has 10 digits
+  // if (phoneNumber.isEmpty) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text('Please enter a valid 10-digit phone number')),
+  //   );
+  //   return;
+  // }
 
   // Fetch details for the entered phone number
   QrProvider qrProvider = Provider.of<QrProvider>(context, listen: false);
-  qrProvider.mobile = formatPhoneNumber(phoneNumber);
+  qrProvider.mobile = phoneNumber;
   await qrProvider.getDetails(context: context);
 
   if (qrProvider.detailsData!.success == true) {
    
   
     setState(() {
-      qrData = formatPhoneNumber(phoneNumber);
+      qrData = phoneNumber;
       isLoading = false;
     });
     // Show a message that the user needs to register

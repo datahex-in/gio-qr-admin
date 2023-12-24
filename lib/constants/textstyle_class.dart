@@ -67,6 +67,11 @@ class TextStyleClass {
       fontSize: 12,
       fontWeight: FontWeight.w400,
       color: ColorClass.black);
+  static TextStyle black14_400qua = const TextStyle(
+      fontFamily: quaterneryFontName,
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: ColorClass.black);
 
   static TextStyle black12_300 = const TextStyle(
       fontFamily: primaryFontName,

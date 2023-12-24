@@ -44,13 +44,13 @@ class QrProvider extends ChangeNotifier {
           title: const Center(child: Text('Registration Required',
           textAlign: TextAlign.center,)),
           content: SizedBox(
-            height: 120, // Adjust the height as needed
+            height: 60, // Adjust the height as needed
             child: Column(
               children: [
                   Text(
                   'Your registration to Discurso Muslimah is not yet received. Register Now',
                   textAlign: TextAlign.center,
-                  style: TextStyleClass.black12_400qua,
+                  style: TextStyleClass.black14_400qua,
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(
@@ -69,11 +69,18 @@ class QrProvider extends ChangeNotifier {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const GioHome()));
-              },
-              child: const Text('Close'),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: const Color.fromARGB(255, 117, 182, 235)
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const GioHome()));
+                },
+                child:   Text('Close',
+                style: TextStyleClass.white14_500,),
+              ),
             ),
           ],
         );
